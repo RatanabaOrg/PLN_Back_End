@@ -26,18 +26,17 @@ async function run() {
 run().catch(console.dir);
 
 const database = client.db('ratanaba');
-const collection = database.collection('usuario');
+const collection = database.collection('area');
 
-
-class Usuario {
+class Area {
 
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
             try {
                 const insertOneResult = await collection.insertOne(data);
-                resolve(`Usuário inserido.\n`);
+                resolve(`Área inserida.\n`);
             } catch (err) {
-                reject(`Erro ao inserir usuário: ${err}\n`);
+                reject(`Erro ao inserir área: ${err}\n`);
             }
         });
     }
@@ -48,7 +47,7 @@ class Usuario {
                 const dados = await collection.find({}).toArray();
                 resolve(dados);
             } catch (err) {
-                reject(`Não foi possível encontrar usuários: ${err}\n`);
+                reject(`Não foi possível encontrar áreas: ${err}\n`);
             }
         });
     }
@@ -56,10 +55,10 @@ class Usuario {
     visualizar(id) {
         return new Promise(async (resolve, reject) => {
             try {
-                const dados = await collection.findOne({"_id": new ObjectId(id)});
+                const dados = await collection.findOne({ "_id": new ObjectId(id) });
                 resolve(dados);
             } catch (err) {
-                reject(`Não foi possível encontra o usuário: ${err}\n`);
+                reject(`Não foi possível encontrar a área: ${err}\n`);
             }
         });
     }
@@ -68,17 +67,17 @@ class Usuario {
         return new Promise(async (resolve, reject) => {
             try {
                 const updateResult = await collection.updateOne(
-                    { _id: new ObjectId(id) }, 
-                    { $set: novosDados } 
+                    { _id: new ObjectId(id) },
+                    { $set: novosDados }
                 );
 
                 if (updateResult.matchedCount === 0) {
-                    reject(`Usuário com id ${id} não encontrado.\n`);
+                    reject(`Área com id ${id} não encontrada.\n`);
                 } else {
-                    resolve(`Usuário com id ${id} atualizado.\n`);
+                    resolve(`Área com id ${id} atualizada.\n`);
                 }
             } catch (err) {
-                reject(`Erro ao atualizar usuário: ${err}\n`);
+                reject(`Erro ao atualizar área: ${err}\n`);
             }
         });
     }
@@ -89,12 +88,12 @@ class Usuario {
                 const deleteResult = await collection.deleteOne({ _id: new ObjectId(id) });
 
                 if (deleteResult.deletedCount === 0) {
-                    reject(`Usuário com id ${id} não encontrado.\n`);
+                    reject(`Área com id ${id} não encontrada.\n`);
                 } else {
-                    resolve(`Usuário com id ${id} deletado.\n`);
+                    resolve(`Área com id ${id} deletada.\n`);
                 }
             } catch (err) {
-                reject(`Erro ao deletar usuário: ${err}\n`);
+                reject(`Erro ao deletar área: ${err}\n`);
             }
         });
     }
@@ -102,5 +101,5 @@ class Usuario {
 }
 
 module.exports = {
-    Usuario: Usuario
+    Area: Area
 }
