@@ -1,6 +1,7 @@
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const uri = "mongodb+srv://ratanabaorg:praga@cluster0.m8qcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -34,7 +35,7 @@ class Instancia{
     
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
-
+            data.data = new Date();
             try {
                 const insertManyResult = await collection.insertOne(data);
                 resolve(`instancia inserida.\n`);
@@ -45,7 +46,7 @@ class Instancia{
         })
     }
 
-    visualizar() {
+    visualizarTodos() {
         return new Promise(async (resolve, reject) => {
 
             try {
