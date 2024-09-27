@@ -31,6 +31,21 @@ const collection = database.collection('usuario');
 
 class Usuario {
 
+    login(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const usuario = await collection.findOne({"email": data.email})
+                if(usuario && data.password==usuario.password) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            } catch(err) {
+                reject(`Erro ao logar usuário: ${err}\n`);
+            }
+        })
+    }
+
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
             try {

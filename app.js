@@ -108,15 +108,15 @@ app.get('/visualizar/usuariosParaAprovar', async (req, res) => {
     }
 });
 
-app.put('/aprovar/usuarios', async (req, res) => {
+app.post('/login/usuario', async (req, res) => {
     var usuario = new Usuario();
     try {
-        const resultado = await usuario.aprovar();
+        const resultado = await usuario.login(req.body);
         res.send(JSON.stringify(resultado));
     } catch (error) {
-        res.status(500).send("Erro durante o processo de cadastro de usuário.");
+        res.status(500).send("Erro durante o processo de login.");
     }
-});
+})
 
 // Área
 app.post('/cadastro/area', async (req, res) => {
