@@ -45,7 +45,18 @@ class Usuario {
     visualizarTodos() {
         return new Promise(async (resolve, reject) => {
             try {
-                const dados = await collection.find({}).sort({ name: 1 }).toArray();
+                const dados = await collection.find({ approved: true }).sort({ name: 1 }).toArray();
+                resolve(dados);
+            } catch (err) {
+                reject(`Não foi possível encontrar usuários: ${err}\n`);
+            }
+        });
+    }
+
+    usuariosParaAprovar() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const dados = await collection.find({ approved: false }).sort({ createdAt: -1 }).toArray();
                 resolve(dados);
             } catch (err) {
                 reject(`Não foi possível encontrar usuários: ${err}\n`);

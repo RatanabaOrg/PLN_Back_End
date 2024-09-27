@@ -34,6 +34,16 @@ app.get('/visualizar/historico', async (req, res) => {
     }
 });
 
+app.get('/visualizar/ultimos/acessos', async (req, res) => {
+    var instancia = new Instancia();
+    try {
+        const resultado = await instancia.visualizarUltimos();
+        res.send(JSON.stringify(resultado));
+    } catch (error) {
+        res.status(500).send("Erro durante o processo de visualização de instancias.");
+    }
+});
+
 //Usuario
 app.post('/cadastro/usuario', async (req, res) => {
     var usuario = new Usuario();
@@ -87,6 +97,26 @@ app.delete('/deletar/usuario/:id', async (req, res) => {
         res.status(500).send("Erro durante o processo de dele de usuário.");
     }
 })
+
+app.get('/visualizar/usuariosParaAprovar', async (req, res) => {
+    var usuario = new Usuario();
+    try {
+        const resultado = await usuario.usuariosParaAprovar();
+        res.send(JSON.stringify(resultado));
+    } catch (error) {
+        res.status(500).send("Erro durante o processo de cadastro de usuário.");
+    }
+});
+
+app.put('/aprovar/usuarios', async (req, res) => {
+    var usuario = new Usuario();
+    try {
+        const resultado = await usuario.aprovar();
+        res.send(JSON.stringify(resultado));
+    } catch (error) {
+        res.status(500).send("Erro durante o processo de cadastro de usuário.");
+    }
+});
 
 // Área
 app.post('/cadastro/area', async (req, res) => {
