@@ -44,7 +44,7 @@ class Area {
     visualizarTodos() {
         return new Promise(async (resolve, reject) => {
             try {
-                const dados = await collection.find({}).toArray();
+                const dados = await collection.find({}).sort({ name: 1 }).toArray();
                 resolve(dados);
             } catch (err) {
                 reject(`Não foi possível encontrar áreas: ${err}\n`);
