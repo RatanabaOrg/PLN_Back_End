@@ -31,6 +31,21 @@ const collection = database.collection('usuario');
 
 class Usuario {
 
+    login(data) {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const usuario = await collection.findOne({"email": data.email})
+                if(usuario && data.password==usuario.password) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            } catch(err) {
+                reject(`Erro ao logar usuário: ${err}\n`);
+            }
+        })
+    }
+
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
             try {
@@ -45,7 +60,18 @@ class Usuario {
     visualizarTodos() {
         return new Promise(async (resolve, reject) => {
             try {
-                const dados = await collection.find({}).sort({ name: 1 }).toArray();
+                const dados = await collection.find({ approved: true }).sort({ name: 1 }).toArray();
+                resolve(dados);
+            } catch (err) {
+                reject(`Não foi possível encontrar usuários: ${err}\n`);
+            }
+        });
+    }
+
+    usuariosParaAprovar() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const dados = await collection.find({ approved: false }).sort({ createdAt: -1 }).toArray();
                 resolve(dados);
             } catch (err) {
                 reject(`Não foi possível encontrar usuários: ${err}\n`);
