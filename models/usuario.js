@@ -1,5 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const { ObjectId } = require('mongodb'); 
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const uri = "mongodb+srv://ratanabaorg:praga@cluster0.m8qcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -34,12 +36,18 @@ class Usuario {
     login(data) {
         return new Promise(async (resolve, reject) => {
             try {
-                const usuario = await collection.findOne({"email": data.email})
-                if(usuario && data.password==usuario.password) {
-                    resolve(true)
-                } else {
-                    resolve(false)
+                const usuario = await collection.findOne({"email": data.email, "approved": true})
+                if (!usuario) {
+                    return res.status(400).json({ msg: 'Credenciais inválidas' });
                 }
+        
+                const isMatch = await bcrypt.compare(data.password, usuario.password);
+                if (!isMatch) {
+                    return res.status(400).json({ msg: 'Credenciais inválidas' });
+                }
+                const payload = { userId: usuario._id };
+                const token = jwt.sign(payload , 'secretKey', { expiresIn: '1h' });
+                resolve(token)
             } catch(err) {
                 reject(`Erro ao logar usuário: ${err}\n`);
             }
@@ -49,8 +57,14 @@ class Usuario {
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
             try {
+                const existingUser = await this.buscarEmail(data.email);
+                if (existingUser) {
+                    return res.status(400).json({ msg: 'Usuário já existe' });
+                }
+                const salt = await bcrypt.genSalt(10);
+                data.password = await bcrypt.hash(data.password, salt);
                 const insertOneResult = await collection.insertOne(data);
-                resolve(`Usuário inserido.\n`);
+                resolve('Usuário cadastrado!\n');
             } catch (err) {
                 reject(`Erro ao inserir usuário: ${err}\n`);
             }
@@ -88,6 +102,15 @@ class Usuario {
                 reject(`Não foi possível encontra o usuário: ${err}\n`);
             }
         });
+    }
+
+    async buscarEmail(email) {
+            try {
+                const dados = await collection.findOne({"email": email});
+                return dados
+            } catch (err) {
+                console.log(`Não foi possível encontra o usuário: ${err}\n`);
+            }
     }
 
     atualizar(id, novosDados) {

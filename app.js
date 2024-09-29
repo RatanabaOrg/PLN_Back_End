@@ -1,4 +1,5 @@
 const express = require('express');
+const authMiddleware = require('./models/auth/auth');
 const { Instancia } = require('./models/instancia');
 const { Usuario } = require('./models/usuario')
 const { Area } = require("./models/area");
@@ -14,7 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 //Instancia/Historico
-app.post('/cadastro/instancia', async (req, res) => {
+app.post('/cadastro/instancia', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.cadastro(req.body);
@@ -24,7 +25,7 @@ app.post('/cadastro/instancia', async (req, res) => {
     }
 });
 
-app.get('/visualizar/historico', async (req, res) => {
+app.get('/visualizar/historico', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.visualizarTodos();
@@ -34,7 +35,7 @@ app.get('/visualizar/historico', async (req, res) => {
     }
 });
 
-app.get('/visualizar/ultimos/acessos', async (req, res) => {
+app.get('/visualizar/ultimos/acessos', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.visualizarUltimos();
@@ -55,7 +56,7 @@ app.post('/cadastro/usuario', async (req, res) => {
     }
 });
 
-app.get('/visualizar/usuarios', async (req, res) => {
+app.get('/visualizar/usuarios', authMiddleware, async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.visualizarTodos();
@@ -65,7 +66,7 @@ app.get('/visualizar/usuarios', async (req, res) => {
     }
 });
 
-app.get('/visualizar/usuario/:id', async (req, res) => {
+app.get('/visualizar/usuario/:id', authMiddleware, async (req, res) => {
     var usuario = new Usuario();
     const {id} = req.params;
     try {
@@ -76,7 +77,7 @@ app.get('/visualizar/usuario/:id', async (req, res) => {
     }
 });
 
-app.put('/atualizar/usuario/:id', async (req, res) => {
+app.put('/atualizar/usuario/:id', authMiddleware, async (req, res) => {
     var usuario = new Usuario();
     const {id} = req.params;
     try {
@@ -87,7 +88,7 @@ app.put('/atualizar/usuario/:id', async (req, res) => {
     }
 })
 
-app.delete('/deletar/usuario/:id', async (req, res) => {
+app.delete('/deletar/usuario/:id', authMiddleware, async (req, res) => {
     var usuario = new Usuario();
     const {id} = req.params;
     try {
@@ -98,7 +99,7 @@ app.delete('/deletar/usuario/:id', async (req, res) => {
     }
 })
 
-app.get('/visualizar/usuariosParaAprovar', async (req, res) => {
+app.get('/visualizar/usuariosParaAprovar', authMiddleware, async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.usuariosParaAprovar();
@@ -119,7 +120,7 @@ app.post('/login/usuario', async (req, res) => {
 })
 
 // Área
-app.post('/cadastro/area', async (req, res) => {
+app.post('/cadastro/area', authMiddleware, async (req, res) => {
     var area = new Area();
     try {
         const resultado = await area.cadastro(req.body);
@@ -129,7 +130,7 @@ app.post('/cadastro/area', async (req, res) => {
     }
 });
 
-app.get('/visualizar/areas', async (req, res) => {
+app.get('/visualizar/areas', authMiddleware, async (req, res) => {
     var area = new Area();
     try {
         const resultado = await area.visualizarTodos();
@@ -139,7 +140,7 @@ app.get('/visualizar/areas', async (req, res) => {
     }
 });
 
-app.get('/visualizar/area/:id', async (req, res) => {
+app.get('/visualizar/area/:id', authMiddleware, async (req, res) => {
     var area = new Area();
     const { id } = req.params;
     try {
@@ -150,7 +151,7 @@ app.get('/visualizar/area/:id', async (req, res) => {
     }
 });
 
-app.put('/atualizar/area/:id', async (req, res) => {
+app.put('/atualizar/area/:id', authMiddleware, async (req, res) => {
     var area = new Area();
     const { id } = req.params;
     try {
@@ -161,7 +162,7 @@ app.put('/atualizar/area/:id', async (req, res) => {
     }
 });
 
-app.delete('/deletar/area/:id', async (req, res) => {
+app.delete('/deletar/area/:id', authMiddleware, async (req, res) => {
     var area = new Area();
     const { id } = req.params;
     try {
