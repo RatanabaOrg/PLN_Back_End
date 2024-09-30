@@ -1,6 +1,7 @@
 
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { ObjectId } = require('mongodb');
 const uri = "mongodb+srv://ratanabaorg:praga@cluster0.m8qcp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -34,7 +35,14 @@ class Instancia{
     
     cadastro(data) {
         return new Promise(async (resolve, reject) => {
-
+          let date =  new Date();
+          const formattedDate = `${String(date.getDate()).padStart(2, '0')}/${
+            String(date.getMonth() + 1).padStart(2, '0')}/${
+            date.getFullYear()} ${
+            String(date.getHours()).padStart(2, '0')}:${
+            String(date.getMinutes()).padStart(2, '0')}:${
+            String(date.getSeconds()).padStart(2, '0')}`;
+          data.data = formattedDate;
             try {
                 const insertManyResult = await collection.insertOne(data);
                 resolve(`instancia inserida.\n`);
@@ -45,16 +53,36 @@ class Instancia{
         })
     }
 
-    visualizar() {
+    visualizarTodos() {
         return new Promise(async (resolve, reject) => {
 
             try {
-                var dados = collection.find({}).toArray();
+              var dados = collection.find({}).sort({ data: -1 }).toArray();
                 resolve(dados)
             } catch {
                 reject(`Não foi possivel encontrar instancias: ${err}\n`);
             }
         })
+    }
+
+    visualizarUltimos() {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const hoje = new Date();
+          const dia = String(hoje.getDate()).padStart(2, "0");
+          const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+          const ano = hoje.getFullYear();
+          const dataHoje = `${dia}/${mes}/${ano}`;
+  
+          const dados = await collection
+            .find({ data: { $regex: dataHoje } })
+            .sort({ data: -1 })
+            .toArray();
+          resolve(dados);
+        } catch (err) {
+          reject(`Não foi possível encontrar usuários: ${err}\n`);
+        }
+      });
     }
 }
 
