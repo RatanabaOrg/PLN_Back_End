@@ -57,7 +57,7 @@ class Instancia{
         return new Promise(async (resolve, reject) => {
 
             try {
-              var dados = collection.find({}).sort({ data: -1 }).toArray();
+              var dados = collection.find({}).sort({ _id: -1 }).toArray();
                 resolve(dados)
             } catch {
                 reject(`Não foi possivel encontrar instancias: ${err}\n`);
@@ -76,7 +76,7 @@ class Instancia{
   
           const dados = await collection
             .find({ data: { $regex: dataHoje } })
-            .sort({ data: -1 })
+            .sort({ _id: -1 })
             .toArray();
           resolve(dados);
         } catch (err) {
