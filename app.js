@@ -35,6 +35,16 @@ app.get('/visualizar/historico', authMiddleware, async (req, res) => {
     }
 });
 
+app.get('/visualizar/historico/alerta', authMiddleware, async (req, res) => {
+    var instancia = new Instancia();
+    try {
+        const resultado = await instancia.visualizarAlertas();
+        res.send(JSON.stringify(resultado));
+    } catch (error) {
+        res.status(500).send("Erro durante o processo de visualização de instancias.");
+    }
+});
+
 app.get('/visualizar/ultimos/acessos', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     try {

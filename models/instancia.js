@@ -84,6 +84,25 @@ class Instancia{
         }
       });
     }
+
+    visualizarAlertas() {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const dados = await collection
+            .find({
+              "alert": { 
+                $in: ["moderado", "severo", "crítico"] 
+              }
+            })
+            .sort({ data: -1 })
+            .toArray();
+          console.log(dados)
+          resolve(dados);
+        } catch (err) {
+          reject(`Não foi possível encontrar usuários: ${err}\n`);
+        }
+      });
+    }
 }
 
 module.exports = {
