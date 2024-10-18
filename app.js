@@ -35,10 +35,12 @@ app.get('/visualizar/historico', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/visualizar/historico/alerta', authMiddleware, async (req, res) => {
+app.get('/visualizar/historico/alerta/:nivel', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
+    const { nivel } = req.params;
+
     try {
-        const resultado = await instancia.visualizarAlertas();
+        const resultado = await instancia.visualizarAlertas(nivel);
         res.send(JSON.stringify(resultado));
     } catch (error) {
         res.status(500).send("Erro durante o processo de visualização de instancias.");

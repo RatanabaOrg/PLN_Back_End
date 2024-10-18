@@ -44,7 +44,7 @@ class Instancia{
             String(date.getSeconds()).padStart(2, '0')}`;
           data.data = formattedDate;
             try {
-                const insertManyResult = await collection.insertOne(data);
+                await collection.insertOne(data);
                 resolve(`instancia inserida.\n`);
               } catch (err) {
                 reject(`erro ao inserir instancia: ${err}\n`);
@@ -85,24 +85,30 @@ class Instancia{
       });
     }
 
-    visualizarAlertas() {
+    visualizarAlertas(nivel) {
       return new Promise(async (resolve, reject) => {
         try {
+          let filtro = {};
+          
+          if (nivel=="todos") {
+            filtro.alert = { $in: ["Moderado", "Severo", "Crítico"] };
+
+          } else {
+            filtro.alert = { $in: [nivel] };
+          }
+
           const dados = await collection
-            .find({
-              "alert": { 
-                $in: ["moderado", "severo", "crítico"] 
-              }
-            })
-            .sort({ data: -1 })
+            .find(filtro)
+            .sort({ _id: -1 })
             .toArray();
-          console.log(dados)
+          
           resolve(dados);
         } catch (err) {
-          reject(`Não foi possível encontrar usuários: ${err}\n`);
+          reject(`Não foi possível encontrar alertas: ${err}\n`);
         }
       });
     }
+    
 }
 
 module.exports = {
