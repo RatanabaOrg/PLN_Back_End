@@ -57,15 +57,15 @@ app.get('/visualizar/ultimos/acessos', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/acessosPorDia/:area', async (req, res) => {
+app.get('/acessosPorDia/:area', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     const {area} = req.params
-    //try {
+    try {
         const resultado = await instancia.acessosDia(area);
         res.send(JSON.stringify(resultado));
-    // } catch (error) {
-    //     res.status(500).send("Erro durante o processo de visualização de instancias.");
-    // }
+    } catch (error) {
+        res.status(500).send("Erro durante o processo de visualização de instancias.");
+    }
 });
 
 //Usuario

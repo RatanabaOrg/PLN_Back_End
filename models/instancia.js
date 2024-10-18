@@ -87,7 +87,7 @@ class Instancia{
 
     acessosDia(area) {
       return new Promise(async (resolve, reject) => {
-        //try {
+        try {
           const contagem = {};
           var dados;
           if (area == "todos") {
@@ -107,9 +107,9 @@ class Instancia{
             contagem[data] = (contagem[data] || 0) + 1; 
           });
           resolve(contagem)
-        // } catch (err) {
-        //   reject(`Não foi possivel encontrar instancias: ${err}\n`);
-        // }
+        } catch (err) {
+          reject(`Não foi possivel encontrar instancias: ${err}\n`);
+        }
       })
     }
 
