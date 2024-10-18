@@ -85,6 +85,34 @@ class Instancia{
       });
     }
 
+    acessosDia(area) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const contagem = {};
+          var dados;
+          if (area == "todos") {
+            dados = await collection
+              .find()
+              .sort({ data: 1})
+              .toArray()
+          } else {
+            dados = await collection
+              .find({ area: area })
+              .sort({ data: 1})
+              .toArray()
+          }
+          dados.forEach(doc => {
+            const dataCompleta = doc.data; 
+            const [data] = dataCompleta.split(' '); 
+            contagem[data] = (contagem[data] || 0) + 1; 
+          });
+          resolve(contagem)
+        } catch (err) {
+          reject(`Não foi possivel encontrar instancias: ${err}\n`);
+        }
+      })
+    }
+
     visualizarAlertas(nivel) {
       return new Promise(async (resolve, reject) => {
         try {
