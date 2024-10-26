@@ -136,8 +136,90 @@ class Instancia{
         }
       });
     }
+
+    async diasSemAcesso(area) {
+      return new Promise(async (resolve, reject) => {
+          try {
+              const dados = await collection
+                  .find({ area: area })
+                  .sort({ _id: -1 })
+                  .limit(1)
+                  .toArray();
+  
+              if (dados.length === 0) {
+                  resolve({ diasSemAcesso: 0 }); // Retorna um objeto JSON
+                  return;
+              }
+  
+              const dataParts = dados[0].data.split(' ')[0].split('/');
+              const dia = dataParts[0];
+              const mes = dataParts[1];
+              const ano = dataParts[2];
+  
+              const dataUltimoAcesso = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+              const dataAtual = new Date();
+  
+              if (isNaN(dataUltimoAcesso.getTime())) {
+                  reject(`Data do último acesso inválida: ${dados[0].data}`);
+                  return;
+              }
+  
+              const diferenca = dataAtual - dataUltimoAcesso;
+              const diasSemAcesso = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+              (console.log(diasSemAcesso))
+              resolve({ diasSemAcesso }); // Retorna um objeto JSON
+          } catch (err) {
+              reject(err);
+          }
+      });
+  }
+  
+  
+
+  async maiorTempoSemAcesso() {
+    return new Promise(async (resolve, reject) => {
+        try {
+              const dados = await collection
+                  .find({})
+                  .sort({ _id: -1 })
+                  .limit(1)
+                  .toArray();
+  
+              if (dados.length === 0) {
+                  resolve({ diasSemAcesso: 0 }); // Retorna um objeto JSON
+                  return;
+              }
+  
+              const dataParts = dados[0].data.split(' ')[0].split('/');
+              const dia = dataParts[0];
+              const mes = dataParts[1];
+              const ano = dataParts[2];
+  
+              const dataUltimoAcesso = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+              const dataAtual = new Date();
+  
+              if (isNaN(dataUltimoAcesso.getTime())) {
+                  reject(`Data do último acesso inválida: ${dados[0].data}`);
+                  return;
+              }
+  
+              const diferenca = dataAtual - dataUltimoAcesso;
+              const diasSemAcesso = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+              (console.log(diasSemAcesso))
+              resolve({ diasSemAcesso }); // Retorna um objeto JSON
+          } catch (err) {
+              reject(err);
+          }
+      });
+
+
+}}
+
+
+
+  
     
-}
+
 
 module.exports = {
     Instancia: Instancia
