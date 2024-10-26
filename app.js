@@ -68,7 +68,7 @@ app.get('/acessosPorDia/:area', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/diasSemAcesso/:area',  async (req, res) => {
+app.get('/diasSemAcesso/:area', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
     const { area } = req.params;
     try {
@@ -80,7 +80,7 @@ app.get('/diasSemAcesso/:area',  async (req, res) => {
     }
 });
 
-app.get('/maiorTempoSemAcesso', async (req, res) => {
+app.get('/maiorTempoSemAcesso', authMiddleware,async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.maiorTempoSemAcesso();
@@ -92,7 +92,7 @@ app.get('/maiorTempoSemAcesso', async (req, res) => {
 });
 
 //Usuario
-app.post('/cadastro/usuario', async (req, res) => {
+app.post('/cadastro/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.cadastro(req.body);
@@ -155,7 +155,7 @@ app.get('/visualizar/usuariosParaAprovar', authMiddleware, async (req, res) => {
     }
 });
 
-app.post('/login/usuario', async (req, res) => {
+app.post('/login/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.login(req.body);
@@ -176,7 +176,7 @@ app.post('/cadastro/area', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/visualizar/areas',  async (req, res) => {
+app.get('/visualizar/areas',  authMiddleware,async (req, res) => {
     var area = new Area();
     try {
         const resultado = await area.visualizarTodos();
