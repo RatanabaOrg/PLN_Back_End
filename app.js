@@ -25,7 +25,7 @@ app.post('/cadastro/instancia', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/visualizar/historico', authMiddleware, async (req, res) => {
+app.get('/visualizar/historico', async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.visualizarTodos();
@@ -68,8 +68,29 @@ app.get('/acessosPorDia/:area', authMiddleware, async (req, res) => {
     }
 });
 
+app.get('/diasSemAcesso/:area', authMiddleware, async (req, res) => {
+    var instancia = new Instancia();
+    const { area } = req.params;
+    try {
+        const resultado = await instancia.diasSemAcesso(area);
+        console.log(resultado)
+    } catch (error) {
+        res.status(500).send("Erro durante o cálculo de dias sem acesso.");
+    }
+});
+
+app.get('/maiorTempoSemAcesso', authMiddleware, async (req, res) => {
+    var instancia = new Instancia();
+    try {
+        const resultado = await instancia.maiorTempoSemAcesso();
+        console.log(resultado)
+    } catch (error) {
+        res.status(500).send("Erro durante o cálculo do maior tempo sem acesso.");
+    }
+});
+
 //Usuario
-app.post('/cadastro/usuario', async (req, res) => {
+app.post('/cadastro/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.cadastro(req.body);
@@ -132,7 +153,7 @@ app.get('/visualizar/usuariosParaAprovar', authMiddleware, async (req, res) => {
     }
 });
 
-app.post('/login/usuario', async (req, res) => {
+app.post('/login/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.login(req.body);
@@ -153,7 +174,7 @@ app.post('/cadastro/area', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/visualizar/areas', authMiddleware, async (req, res) => {
+app.get('/visualizar/areas',  authMiddleware,async (req, res) => {
     var area = new Area();
     try {
         const resultado = await area.visualizarTodos();
