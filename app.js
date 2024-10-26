@@ -25,7 +25,8 @@ app.post('/cadastro/instancia', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/visualizar/historico', async (req, res) => {
+
+app.get('/visualizar/historico', authMiddleware,async (req, res) => {
     var instancia = new Instancia();
     try {
         const resultado = await instancia.visualizarTodos();
@@ -90,6 +91,7 @@ app.get('/maiorTempoSemAcesso', authMiddleware, async (req, res) => {
 });
 
 //Usuario
+
 app.post('/cadastro/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
@@ -153,6 +155,7 @@ app.get('/visualizar/usuariosParaAprovar', authMiddleware, async (req, res) => {
     }
 });
 
+
 app.post('/login/usuario', authMiddleware,async (req, res) => {
     var usuario = new Usuario();
     try {
@@ -173,6 +176,7 @@ app.post('/cadastro/area', authMiddleware, async (req, res) => {
         res.status(500).send("Erro durante o processo de cadastro de área.");
     }
 });
+
 
 app.get('/visualizar/areas',  authMiddleware,async (req, res) => {
     var area = new Area();
