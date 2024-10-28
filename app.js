@@ -92,7 +92,7 @@ app.get('/maiorTempoSemAcesso', authMiddleware, async (req, res) => {
 
 //Usuario
 
-app.post('/cadastro/usuario', authMiddleware,async (req, res) => {
+app.post('/cadastro/usuario', async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.cadastro(req.body);
@@ -156,7 +156,7 @@ app.get('/visualizar/usuariosParaAprovar', authMiddleware, async (req, res) => {
 });
 
 
-app.post('/login/usuario', authMiddleware,async (req, res) => {
+app.post('/login/usuario', async (req, res) => {
     var usuario = new Usuario();
     try {
         const resultado = await usuario.login(req.body);
