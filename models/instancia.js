@@ -44,7 +44,7 @@ class Instancia{
             String(date.getSeconds()).padStart(2, '0')}`;
           data.data = formattedDate;
             try {
-                const insertManyResult = await collection.insertOne(data);
+                await collection.insertOne(data);
                 resolve(`instancia inserida.\n`);
               } catch (err) {
                 reject(`erro ao inserir instancia: ${err}\n`);
@@ -57,7 +57,7 @@ class Instancia{
         return new Promise(async (resolve, reject) => {
 
             try {
-              var dados = collection.find({}).sort({ data: -1 }).toArray();
+              var dados = collection.find({}).sort({ _id: -1 }).toArray();
                 resolve(dados)
             } catch {
                 reject(`Não foi possivel encontrar instancias: ${err}\n`);
@@ -76,7 +76,7 @@ class Instancia{
   
           const dados = await collection
             .find({ data: { $regex: dataHoje } })
-            .sort({ data: -1 })
+            .sort({ _id: -1 })
             .toArray();
           resolve(dados);
         } catch (err) {
@@ -84,7 +84,142 @@ class Instancia{
         }
       });
     }
-}
+
+    acessosDia(area) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const contagem = {};
+          var dados;
+          if (area == "todos") {
+            dados = await collection
+              .find()
+              .sort({ data: 1})
+              .toArray()
+          } else {
+            dados = await collection
+              .find({ area: area })
+              .sort({ data: 1})
+              .toArray()
+          }
+          dados.forEach(doc => {
+            const dataCompleta = doc.data; 
+            const [data] = dataCompleta.split(' '); 
+            contagem[data] = (contagem[data] || 0) + 1; 
+          });
+          resolve(contagem)
+        } catch (err) {
+          reject(`Não foi possivel encontrar instancias: ${err}\n`);
+        }
+      })
+    }
+
+    visualizarAlertas(nivel) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          let filtro = {};
+          
+          if (nivel=="todos") {
+            filtro.alert = { $in: ["Moderado", "Severo", "Crítico"] };
+
+          } else {
+            filtro.alert = { $in: [nivel] };
+          }
+
+          const dados = await collection
+            .find(filtro)
+            .sort({ _id: -1 })
+            .toArray();
+          
+          resolve(dados);
+        } catch (err) {
+          reject(`Não foi possível encontrar alertas: ${err}\n`);
+        }
+      });
+    }
+
+    async diasSemAcesso(area) {
+      return new Promise(async (resolve, reject) => {
+          try {
+              const dados = await collection
+                  .find({ area: area })
+                  .sort({ _id: -1 })
+                  .limit(1)
+                  .toArray();
+  
+              if (dados.length === 0) {
+                  resolve({ diasSemAcesso: 0 }); // Retorna um objeto JSON
+                  return;
+              }
+  
+              const dataParts = dados[0].data.split(' ')[0].split('/');
+              const dia = dataParts[0];
+              const mes = dataParts[1];
+              const ano = dataParts[2];
+  
+              const dataUltimoAcesso = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+              const dataAtual = new Date();
+  
+              if (isNaN(dataUltimoAcesso.getTime())) {
+                  reject(`Data do último acesso inválida: ${dados[0].data}`);
+                  return;
+              }
+  
+              const diferenca = dataAtual - dataUltimoAcesso;
+              const diasSemAcesso = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+              (console.log(diasSemAcesso))
+              resolve({ diasSemAcesso }); // Retorna um objeto JSON
+          } catch (err) {
+              reject(err);
+          }
+      });
+  }
+  
+  
+
+  async maiorTempoSemAcesso() {
+    return new Promise(async (resolve, reject) => {
+        try {
+              const dados = await collection
+                  .find({})
+                  .sort({ _id: -1 })
+                  .limit(1)
+                  .toArray();
+  
+              if (dados.length === 0) {
+                  resolve({ diasSemAcesso: 0 }); // Retorna um objeto JSON
+                  return;
+              }
+  
+              const dataParts = dados[0].data.split(' ')[0].split('/');
+              const dia = dataParts[0];
+              const mes = dataParts[1];
+              const ano = dataParts[2];
+  
+              const dataUltimoAcesso = new Date(`${ano}-${mes}-${dia}T00:00:00`);
+              const dataAtual = new Date();
+  
+              if (isNaN(dataUltimoAcesso.getTime())) {
+                  reject(`Data do último acesso inválida: ${dados[0].data}`);
+                  return;
+              }
+  
+              const diferenca = dataAtual - dataUltimoAcesso;
+              const diasSemAcesso = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+              (console.log(diasSemAcesso))
+              resolve({ diasSemAcesso }); // Retorna um objeto JSON
+          } catch (err) {
+              reject(err);
+          }
+      });
+
+
+}}
+
+
+
+  
+    
+
 
 module.exports = {
     Instancia: Instancia
