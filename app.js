@@ -222,7 +222,7 @@ app.delete('/deletar/area/:id', authMiddleware, async (req, res) => {
 });
 
 
-const PORT = 3000;
+const PORT = 8080;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

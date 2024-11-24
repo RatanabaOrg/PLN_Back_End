@@ -119,7 +119,7 @@ class Instancia{
           let filtro = {};
           
           if (nivel=="todos") {
-            filtro.alert = { $in: ["Moderado", "Severo", "Crítico"] };
+            filtro.alert = { $in: ["Moderado", "Alto", "Crítico"] };
 
           } else {
             filtro.alert = { $in: [nivel] };
