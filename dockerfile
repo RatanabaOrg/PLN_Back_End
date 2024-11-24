@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Exponha a porta do servidor
-EXPOSE 3000
+EXPOSE 8080
 
 # Comando para iniciar o servidor
 CMD ["node", "app.js"]
