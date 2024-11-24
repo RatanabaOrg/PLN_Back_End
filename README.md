@@ -40,5 +40,7 @@ Siga os passos abaixo para executar o projeto localmente:
 - Repositório Documentação: [https://github.com/RatanabaOrg/PLN_Documentacao.git](https://github.com/RatanabaOrg/PLN_Documentacao.git)
 
 - Repositório Frontend: [https://github.com/RatanabaOrg/PLN_Front_End.git](https://github.com/RatanabaOrg/PLN_Front_End.git)
+  
+- Repositório Chatbot: [https://github.com/RatanabaOrg/PLN_Chatbot.git](https://github.com/RatanabaOrg/PLN_Chatbot.git)
 
 <br>
