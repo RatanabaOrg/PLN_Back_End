@@ -85,6 +85,7 @@ app.get('/maiorTempoSemAcesso', authMiddleware, async (req, res) => {
     try {
         const resultado = await instancia.maiorTempoSemAcesso();
         console.log(resultado)
+        res.send(JSON.stringify(resultado))
     } catch (error) {
         res.status(500).send("Erro durante o cálculo do maior tempo sem acesso.");
     }
@@ -222,7 +223,7 @@ app.delete('/deletar/area/:id', authMiddleware, async (req, res) => {
 });
 
 
-const PORT = 8080;
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
