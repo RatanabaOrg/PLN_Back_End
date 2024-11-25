@@ -137,9 +137,10 @@ class Instancia{
       });
     }
 
-    async diasSemAcesso(area) {
+    async diasSemAcesso(data) {
       return new Promise(async (resolve, reject) => {
           try {
+              const area = data.area
               const dados = await collection
                   .find({ area: area })
                   .sort({ _id: -1 })

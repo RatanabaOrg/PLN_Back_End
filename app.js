@@ -69,12 +69,12 @@ app.get('/acessosPorDia/:area', authMiddleware, async (req, res) => {
     }
 });
 
-app.get('/diasSemAcesso/:area', authMiddleware, async (req, res) => {
+app.post('/diasSemAcesso/', authMiddleware, async (req, res) => {
     var instancia = new Instancia();
-    const { area } = req.params;
     try {
-        const resultado = await instancia.diasSemAcesso(area);
+        const resultado = await instancia.diasSemAcesso(req.body);
         console.log(resultado)
+        res.send(JSON.stringify(resultado))
     } catch (error) {
         res.status(500).send("Erro durante o cálculo de dias sem acesso.");
     }
